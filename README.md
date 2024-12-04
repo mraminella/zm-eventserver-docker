@@ -3,6 +3,7 @@ This is based on https://github.com/zoneminder-containers/eventserver-base . I m
 - use the host mode for networking (I have some cameras that use RTCP over UDP and it has some problem on the dockerized network interface)
 - use SSL
 - use Pushover as notification service
+- Mount externally /zm/data in order to be able to sync event video files to external cloud services
 - update Zoneminder more frequently in a safer way
 
 ## Setup
