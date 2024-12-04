@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  db:
+    container_name: db
+    image: mariadb
+    restart: always
+    # network_mode: host
+    # networks:
+    #   - zoneminder
+    ports:
+      - 3306:3306
+    volumes:
+      - ./zm/db:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=zm
+    env_file:
+      - ./.env
+
+  zoneminder:
+    build:
+      dockerfile: Dockerfile
+    container_name: zoneminder
+    #image: ghcr.io/zoneminder-containers/eventserver-base:1.36.35
+    restart: always
+    stop_grace_period: 45s
+    depends_on:
+      - db
+    #ports:
+    #  - 80:80
+    #  - 443:443
+    #  - 9000:9000
+    network_mode: host
+    # networks:
+    #  - zoneminder
+    volumes:
+      - ./zm/data:/data
+      - ./zm/config:/config
+      - ./zm/log:/log
+      - type: tmpfs
+        target: /dev/shm
+        tmpfs:
+          size: 1000000000
+    env_file:
+      - ./.env
+#    environment:
+#      - ZM_SERVER_HOST=zoneminder1
+
+
+#networks:
+#  zoneminder:
+#   external: true
+#   name: host
